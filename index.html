@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор разблокировки iPhone</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+        }
+        body {
+            background: linear-gradient(145deg, #f5f7fa 0%, #e9edf2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
+        }
+        .form-card {
+            background: #ffffff;
+            max-width: 520px;
+            width: 100%;
+            padding: 2rem 2rem 2.2rem;
+            border-radius: 36px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12), 0 8px 20px rgba(0, 0, 0, 0.05);
+            transition: all 0.2s;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(2px);
+        }
+        h2 {
+            font-weight: 600;
+            font-size: 1.8rem;
+            letter-spacing: -0.5px;
+            color: #1c1e24;
+            margin-top: 0.2rem;
+            margin-bottom: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        h2 span {
+            background: #0077ed;
+            color: white;
+            font-size: 1rem;
+            padding: 0.2rem 0.8rem;
+            border-radius: 40px;
+            margin-left: 6px;
+            font-weight: 500;
+        }
+        .field-group {
+            margin-bottom: 1.6rem;
+        }
+        label {
+            display: block;
+            font-weight: 500;
+            font-size: 0.95rem;
+            color: #2d313a;
+            margin-bottom: 6px;
+            letter-spacing: 0.3px;
+        }
+        select, .price-output {
+            width: 100%;
+            padding: 0.9rem 1.2rem;
+            font-size: 1rem;
+            border-radius: 60px;
+            border: 1.5px solid #d0d7e2;
+            background: #fafcff;
+            transition: 0.2s;
+            color: #1a1e26;
+            font-weight: 450;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23555' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1.2rem center;
+            background-size: 1.2rem;
+        }
+        select:focus {
+            border-color: #0077ed;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 119, 237, 0.15);
+            background-color: #ffffff;
+        }
+        select:disabled {
+            opacity: 0.6;
+            background-color: #f0f2f5;
+            cursor: not-allowed;
+        }
+        .warning-box {
+            background: #fee9e7;
+            border-left: 4px solid #d32f2f;
+            padding: 0.8rem 1.2rem;
+            border-radius: 20px;
+            margin: 1.2rem 0 1.4rem;
+            font-size: 0.95rem;
+            color: #a1281e;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .warning-box i {
+            font-size: 1.3rem;
+        }
+        .price-panel {
+            background: #f0f4fe;
+            border-radius: 40px;
+            padding: 0.2rem 0.2rem 0.2rem 1.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 1.5rem 0 0.4rem;
+            border: 1px solid #d9e2f0;
+        }
+        .price-label {
+            font-weight: 500;
+            color: #1f2937;
+            font-size: 1rem;
+        }
+        .price-value {
+            background: #ffffff;
+            padding: 0.7rem 2rem;
+            border-radius: 40px;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: #0077ed;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+            min-width: 100px;
+            text-align: center;
+            letter-spacing: 0.5px;
+        }
+        .price-value.unavailable {
+            color: #b91c1c;
+            background: #ffe6e3;
+        }
+        .status-hint {
+            font-size: 0.9rem;
+            color: #3d4452;
+            margin-top: 0.6rem;
+            padding-left: 0.3rem;
+            opacity: 0.8;
+        }
+        .btn-reset {
+            background: transparent;
+            border: none;
+            color: #4b5563;
+            font-size: 0.9rem;
+            text-decoration: underline dotted;
+            cursor: pointer;
+            padding: 0.5rem 0.2rem;
+            margin-top: 0.2rem;
+        }
+        .btn-reset:hover {
+            color: #111827;
+        }
+        hr {
+            margin: 1.8rem 0 0.6rem;
+            border: 0;
+            height: 1px;
+            background: linear-gradient(to right, #d0d7e2, transparent);
+        }
+        .footnote {
+            font-size: 0.8rem;
+            color: #6b7280;
+            text-align: center;
+            margin-top: 0.8rem;
+        }
+        @media (max-width: 480px) {
+            .form-card { padding: 1.5rem; }
+            .price-panel { flex-wrap: wrap; gap: 10px; padding: 0.8rem 1.2rem; }
+            .price-value { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+<div class="form-card">
+    <h2>🔓 Разблокировка <span>iOS</span></h2>
+
+    <form id="unlockForm" onsubmit="return false;">
+        <!-- Версия iOS -->
+        <div class="field-group">
+            <label for="iosVersion">📱 Версия iOS</label>
+            <select id="iosVersion" name="iosVersion">
+                <option value="26.0">iOS 26.0</option>
+                <option value="26.1" selected>iOS 26.1</option>
+                <option value="26.2">iOS 26.2</option>
+                <option value="27.0">iOS 27.0</option>
+                <option value="28.0">iOS 28.0</option>
+                <option value="29.0">iOS 29.0</option>
+            </select>
+        </div>
+
+        <!-- Модель iPhone -->
+        <div class="field-group">
+            <label for="modelSelect">📲 Модель iPhone</label>
+            <select id="modelSelect" name="modelSelect">
+                <option value="iphone6">iPhone 6</option>
+                <option value="iphone7">iPhone 7</option>
+                <option value="iphone8">iPhone 8</option>
+                <option value="iphoneX">iPhone X</option>
+                <option value="iphoneXR">iPhone XR</option>
+                <option value="iphoneXS">iPhone XS / XS Max</option>
+                <option value="iphone11">iPhone 11</option>
+                <option value="iphone12">iPhone 12</option>
+                <option value="iphone13">iPhone 13</option>
+                <option value="iphone14">iPhone 14</option>
+                <option value="iphone14plus">iPhone 14 Plus</option>
+                <option value="iphone15">iPhone 15</option>
+                <option value="iphone15plus">iPhone 15 Plus</option>
+                <option value="iphone15pro" selected>iPhone 15 Pro</option>
+                <option value="iphone15promax">iPhone 15 Pro Max</option>
+                <option value="iphone16">iPhone 16 (гипотетическая)</option>
+            </select>
+        </div>
+
+        <!-- Блок предупреждения / блокировки -->
+        <div id="warningMessage" class="warning-box">
+            ⚠️ Версия iOS выше 26.1 — разблокировка невозможна
+        </div>
+
+        <!-- Цена -->
+        <div class="price-panel">
+            <span class="price-label">💰 Стоимость</span>
+            <span class="price-value" id="priceDisplay">250 BYN</span>
+        </div>
+        <div class="status-hint" id="statusHint">✅ Доступно для выбранной модели</div>
+
+        <hr>
+        <button type="button" class="btn-reset" id="resetDefaults">↺ Сбросить к 26.1 / 15 Pro</button>
+        <div class="footnote">Цены указаны в BYN</div>
+    </form>
+</div>
+
+<script>
+    (function() {
+        // DOM references
+        const iosSelect = document.getElementById('iosVersion');
+        const modelSelect = document.getElementById('modelSelect');
+        const priceDisplay = document.getElementById('priceDisplay');
+        const warningDiv = document.getElementById('warningMessage');
+        const statusHint = document.getElementById('statusHint');
+
+        // Ценовая карта (BYN)
+        const priceMap = {
+            // 6-10
+            'iphone6': 80,
+            'iphone7': 80,
+            'iphone8': 80,
+            'iphoneX': 100,      // X относится к XS/XSM/XR? но по условию: XS/XSM/XR = 100
+            'iphoneXR': 100,
+            'iphoneXS': 100,
+            // 11-13
+            'iphone11': 150,
+            'iphone12': 150,
+            'iphone13': 150,
+            // 14 series
+            'iphone14': 200,
+            'iphone14plus': 200,
+            // 15/plus
+            'iphone15': 220,
+            'iphone15plus': 220,
+            // 15 pro / pro max
+            'iphone15pro': 250,
+            'iphone15promax': 250,
+            // дополнительные (если вдруг) – для 16 гипотетической оставим 250, но она "выше 15 pro max" => запрет
+            'iphone16': 250,
+        };
+
+        // Модели, которые считаются "выше 15 Pro Max" (запрет)
+        const blockedModels = ['iphone16']; // можно расширить, если появятся iPhone 16, 17 ...
+
+        // Функция определения доступности
+        function checkAvailability() {
+            const iosVersion = parseFloat(iosSelect.value);
+            const model = modelSelect.value;
+
+            // 1) Проверка iOS: если версия > 26.1 — НЕВОЗМОЖНО
+            const iosBlocked = iosVersion > 26.1;
+
+            // 2) Проверка модели: если модель в списке blockedModels (выше 15 Pro Max) — НЕВОЗМОЖНО
+            const modelBlocked = blockedModels.includes(model);
+
+            // 3) Также если модель iPhone 15 Pro / Pro Max разрешены, но для наглядности проверяем отдельно,
+            //    но они не в blockedModels.
+            //    дополнительно: если модель "iphone15promax" это 15 Pro Max, она разрешена (цена 250).
+            //    а "выше 15 pro max" значит модели после 15 pro max — например, 16, 17 ...
+            //    В нашей карте только iphone16 как гипотетическая, поэтому блокируем её.
+
+            const isAvailable = !(iosBlocked || modelBlocked);
+
+            // Обновляем предупреждение
+            if (iosBlocked) {
+                warningDiv.innerHTML = `⚠️ Версия iOS ${iosSelect.value} выше 26.1 — разблокировка невозможна`;
+                warningDiv.style.display = 'flex';
+            } else if (modelBlocked) {
+                const modelLabel = modelSelect.options[modelSelect.selectedIndex]?.text || model;
+                warningDiv.innerHTML = `⚠️ Модель ${modelLabel} выше 15 Pro Max — разблокировка невозможна`;
+                warningDiv.style.display = 'flex';
+            } else {
+                warningDiv.style.display = 'none';
+            }
+
+            // Обновляем цену и статус
+            if (!isAvailable) {
+                priceDisplay.textContent = '❌ Н/Д';
+                priceDisplay.classList.add('unavailable');
+                statusHint.textContent = '⛔ Разблокировка недоступна';
+                statusHint.style.color = '#b91c1c';
+                return false;
+            } else {
+                // Доступно — вычисляем цену
+                let price = priceMap[model];
+                if (price === undefined) {
+                    // fallback (если модель не найдена)
+                    price = 0;
+                }
+                priceDisplay.textContent = `${price} BYN`;
+                priceDisplay.classList.remove('unavailable');
+                statusHint.textContent = '✅ Доступно для выбранной модели';
+                statusHint.style.color = '#1f2937';
+                return true;
+            }
+        }
+
+        // Обработчик изменения любого селекта
+        function updateAll() {
+            checkAvailability();
+        }
+
+        // Сброс к значениям по умолчанию: iOS 26.1, модель 15 Pro
+        function resetToDefaults() {
+            iosSelect.value = '26.1';
+            modelSelect.value = 'iphone15pro';
+            updateAll();
+        }
+
+        // Добавляем слушатели
+        iosSelect.addEventListener('change', updateAll);
+        modelSelect.addEventListener('change', updateAll);
+
+        // Кнопка сброса
+        document.getElementById('resetDefaults').addEventListener('click', resetToDefaults);
+
+        // Инициализация при загрузке (установим состояния по умолчанию)
+        // По умолчанию выбраны: iOS 26.1, модель 15 Pro — должно быть доступно, цена 250
+        // Но на всякий случай принудительно вызовем updateAll
+        window.addEventListener('DOMContentLoaded', function() {
+            // Убедимся, что селекты соответствуют значениям по умолчанию
+            iosSelect.value = '26.1';
+            modelSelect.value = 'iphone15pro';
+            updateAll();
+        });
+
+        // Дополнительно: если пользователь выберет "iPhone 16" – сработает блокировка
+        // Модель "iPhone 16" добавлена в blockedModels
+        // Также проверяем что "выше 15 pro max" означает все, что не является 15 pro max и стоит позже.
+        // Мы добавили iphone16, но также можно добавить iphone17 и т.д.
+        // Для полноты: можно добавить проверку на основе числового сравнения, но проще через список.
+        // Расширим blockedModels если потребуется.
+        // Также проверяем, что "iPhone 15 Pro Max" не блокируется (цена 250)
+        // Всё работает.
+    })();
+</script>
+
+</body>
+</html>
