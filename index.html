@@ -20,14 +20,13 @@
         }
         .form-card {
             background: #ffffff;
-            max-width: 520px;
+            max-width: 540px;
             width: 100%;
             padding: 2rem 2rem 2.2rem;
             border-radius: 36px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12), 0 8px 20px rgba(0, 0, 0, 0.05);
             transition: all 0.2s;
             border: 1px solid rgba(255, 255, 255, 0.6);
-            backdrop-filter: blur(2px);
         }
         h2 {
             font-weight: 600;
@@ -182,35 +181,60 @@
         <div class="field-group">
             <label for="iosVersion">📱 Версия iOS</label>
             <select id="iosVersion" name="iosVersion">
+                <!-- iOS 12–16 (финальные версии) -->
+                <option value="12.5.8">iOS 12.5.8</option>
+                <option value="13.7">iOS 13.7</option>
+                <option value="14.8.1">iOS 14.8.1</option>
+                <option value="15.8.3">iOS 15.8.3</option>
+                <option value="16.7.10">iOS 16.7.10</option>
+                <!-- iOS 17–19 -->
+                <option value="17.7.2">iOS 17.7.2</option>
+                <option value="18.1.1">iOS 18.1.1</option>
+                <option value="19.0">iOS 19.0</option>
+                <!-- iOS 26.x -->
                 <option value="26.0">iOS 26.0</option>
                 <option value="26.1" selected>iOS 26.1</option>
-                <option value="26.2">iOS 26.2</option>
+                <option value="26.5">iOS 26.5</option>
+                <!-- выше 26.1 (блокировка) -->
+                <option value="26.6">iOS 26.6</option>
                 <option value="27.0">iOS 27.0</option>
                 <option value="28.0">iOS 28.0</option>
-                <option value="29.0">iOS 29.0</option>
             </select>
         </div>
 
-        <!-- Модель iPhone -->
+        <!-- Модель iPhone (от 6s до 15 Pro Max) -->
         <div class="field-group">
             <label for="modelSelect">📲 Модель iPhone</label>
             <select id="modelSelect" name="modelSelect">
-                <option value="iphone6">iPhone 6</option>
+                <option value="iphone6s">iPhone 6s</option>
+                <option value="iphone6splus">iPhone 6s Plus</option>
                 <option value="iphone7">iPhone 7</option>
+                <option value="iphone7plus">iPhone 7 Plus</option>
                 <option value="iphone8">iPhone 8</option>
+                <option value="iphone8plus">iPhone 8 Plus</option>
                 <option value="iphoneX">iPhone X</option>
                 <option value="iphoneXR">iPhone XR</option>
-                <option value="iphoneXS">iPhone XS / XS Max</option>
+                <option value="iphoneXS">iPhone XS</option>
+                <option value="iphoneXSmax">iPhone XS Max</option>
                 <option value="iphone11">iPhone 11</option>
+                <option value="iphone11pro">iPhone 11 Pro</option>
+                <option value="iphone11promax">iPhone 11 Pro Max</option>
                 <option value="iphone12">iPhone 12</option>
+                <option value="iphone12mini">iPhone 12 mini</option>
+                <option value="iphone12pro">iPhone 12 Pro</option>
+                <option value="iphone12promax">iPhone 12 Pro Max</option>
                 <option value="iphone13">iPhone 13</option>
+                <option value="iphone13mini">iPhone 13 mini</option>
+                <option value="iphone13pro">iPhone 13 Pro</option>
+                <option value="iphone13promax">iPhone 13 Pro Max</option>
                 <option value="iphone14">iPhone 14</option>
                 <option value="iphone14plus">iPhone 14 Plus</option>
+                <option value="iphone14pro">iPhone 14 Pro</option>
+                <option value="iphone14promax">iPhone 14 Pro Max</option>
                 <option value="iphone15">iPhone 15</option>
                 <option value="iphone15plus">iPhone 15 Plus</option>
                 <option value="iphone15pro" selected>iPhone 15 Pro</option>
                 <option value="iphone15promax">iPhone 15 Pro Max</option>
-                <option value="iphone16">iPhone 16 (гипотетическая)</option>
             </select>
         </div>
 
@@ -234,62 +258,68 @@
 
 <script>
     (function() {
-        // DOM references
         const iosSelect = document.getElementById('iosVersion');
         const modelSelect = document.getElementById('modelSelect');
         const priceDisplay = document.getElementById('priceDisplay');
         const warningDiv = document.getElementById('warningMessage');
         const statusHint = document.getElementById('statusHint');
 
-        // Ценовая карта (BYN)
+        // Ценовая карта (BYN) для всех моделей от 6s до 15 Pro Max
         const priceMap = {
-            // 6-10
-            'iphone6': 80,
+            // 6s, 7, 8, X — 80 BYN (по условию "iPhone 6-10: 80")
+            'iphone6s': 80,
+            'iphone6splus': 80,
             'iphone7': 80,
+            'iphone7plus': 80,
             'iphone8': 80,
-            'iphoneX': 100,      // X относится к XS/XSM/XR? но по условию: XS/XSM/XR = 100
+            'iphone8plus': 80,
+            'iphoneX': 80,        // X входит в "6-10" (формально X — 10-е поколение)
+            // XR, XS, XS Max — 100 BYN
             'iphoneXR': 100,
             'iphoneXS': 100,
-            // 11-13
+            'iphoneXSmax': 100,
+            // 11, 12, 13 — 150 BYN (кроме Pro/Max — они тоже 150, так как в условии "11-13: 150")
             'iphone11': 150,
+            'iphone11pro': 150,
+            'iphone11promax': 150,
             'iphone12': 150,
+            'iphone12mini': 150,
+            'iphone12pro': 150,
+            'iphone12promax': 150,
             'iphone13': 150,
-            // 14 series
+            'iphone13mini': 150,
+            'iphone13pro': 150,
+            'iphone13promax': 150,
+            // 14 series — 200 BYN
             'iphone14': 200,
             'iphone14plus': 200,
-            // 15/plus
+            'iphone14pro': 200,
+            'iphone14promax': 200,
+            // 15/plus — 220 BYN
             'iphone15': 220,
             'iphone15plus': 220,
-            // 15 pro / pro max
+            // 15 pro / pro max — 250 BYN
             'iphone15pro': 250,
             'iphone15promax': 250,
-            // дополнительные (если вдруг) – для 16 гипотетической оставим 250, но она "выше 15 pro max" => запрет
-            'iphone16': 250,
         };
 
-        // Модели, которые считаются "выше 15 Pro Max" (запрет)
-        const blockedModels = ['iphone16']; // можно расширить, если появятся iPhone 16, 17 ...
+        // Моделей "выше 15 Pro Max" в списке нет (убрали iPhone 16 и т.д.)
+        // поэтому blockedModels пуст
+        const blockedModels = []; // всё, что выше 15 Pro Max — отсутствует
 
-        // Функция определения доступности
         function checkAvailability() {
             const iosVersion = parseFloat(iosSelect.value);
             const model = modelSelect.value;
 
-            // 1) Проверка iOS: если версия > 26.1 — НЕВОЗМОЖНО
+            // iOS > 26.1 — блокировка
             const iosBlocked = iosVersion > 26.1;
 
-            // 2) Проверка модели: если модель в списке blockedModels (выше 15 Pro Max) — НЕВОЗМОЖНО
+            // Модель выше 15 Pro Max — в нашем списке таких нет, но оставим проверку для гибкости
             const modelBlocked = blockedModels.includes(model);
-
-            // 3) Также если модель iPhone 15 Pro / Pro Max разрешены, но для наглядности проверяем отдельно,
-            //    но они не в blockedModels.
-            //    дополнительно: если модель "iphone15promax" это 15 Pro Max, она разрешена (цена 250).
-            //    а "выше 15 pro max" значит модели после 15 pro max — например, 16, 17 ...
-            //    В нашей карте только iphone16 как гипотетическая, поэтому блокируем её.
 
             const isAvailable = !(iosBlocked || modelBlocked);
 
-            // Обновляем предупреждение
+            // Предупреждение
             if (iosBlocked) {
                 warningDiv.innerHTML = `⚠️ Версия iOS ${iosSelect.value} выше 26.1 — разблокировка невозможна`;
                 warningDiv.style.display = 'flex';
@@ -301,65 +331,46 @@
                 warningDiv.style.display = 'none';
             }
 
-            // Обновляем цену и статус
             if (!isAvailable) {
                 priceDisplay.textContent = '❌ Н/Д';
                 priceDisplay.classList.add('unavailable');
                 statusHint.textContent = '⛔ Разблокировка недоступна';
                 statusHint.style.color = '#b91c1c';
                 return false;
-            } else {
-                // Доступно — вычисляем цену
-                let price = priceMap[model];
-                if (price === undefined) {
-                    // fallback (если модель не найдена)
-                    price = 0;
-                }
-                priceDisplay.textContent = `${price} BYN`;
-                priceDisplay.classList.remove('unavailable');
-                statusHint.textContent = '✅ Доступно для выбранной модели';
-                statusHint.style.color = '#1f2937';
-                return true;
             }
+
+            // Доступно — цена
+            let price = priceMap[model];
+            if (price === undefined) {
+                price = 0; // fallback (на случай, если модель не найдена)
+            }
+            priceDisplay.textContent = `${price} BYN`;
+            priceDisplay.classList.remove('unavailable');
+            statusHint.textContent = '✅ Доступно для выбранной модели';
+            statusHint.style.color = '#1f2937';
+            return true;
         }
 
-        // Обработчик изменения любого селекта
         function updateAll() {
             checkAvailability();
         }
 
-        // Сброс к значениям по умолчанию: iOS 26.1, модель 15 Pro
         function resetToDefaults() {
             iosSelect.value = '26.1';
             modelSelect.value = 'iphone15pro';
             updateAll();
         }
 
-        // Добавляем слушатели
         iosSelect.addEventListener('change', updateAll);
         modelSelect.addEventListener('change', updateAll);
-
-        // Кнопка сброса
         document.getElementById('resetDefaults').addEventListener('click', resetToDefaults);
 
-        // Инициализация при загрузке (установим состояния по умолчанию)
-        // По умолчанию выбраны: iOS 26.1, модель 15 Pro — должно быть доступно, цена 250
-        // Но на всякий случай принудительно вызовем updateAll
+        // Инициализация
         window.addEventListener('DOMContentLoaded', function() {
-            // Убедимся, что селекты соответствуют значениям по умолчанию
             iosSelect.value = '26.1';
             modelSelect.value = 'iphone15pro';
             updateAll();
         });
-
-        // Дополнительно: если пользователь выберет "iPhone 16" – сработает блокировка
-        // Модель "iPhone 16" добавлена в blockedModels
-        // Также проверяем что "выше 15 pro max" означает все, что не является 15 pro max и стоит позже.
-        // Мы добавили iphone16, но также можно добавить iphone17 и т.д.
-        // Для полноты: можно добавить проверку на основе числового сравнения, но проще через список.
-        // Расширим blockedModels если потребуется.
-        // Также проверяем, что "iPhone 15 Pro Max" не блокируется (цена 250)
-        // Всё работает.
     })();
 </script>
 
