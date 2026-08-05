@@ -1,12 +1,126 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Сервис разблокировки Apple</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>wr8rw Unlock</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-900 min-h-screen">
+
+    <header class="bg-white shadow-sm sticky top-0 z-10">
+        <nav class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+            <a href="/" class="text-2xl font-bold text-gray-900 tracking-tight">wr8rw Unlock</a>
+            <a href="https://t.me/wr8rwunlock" target="_blank" class="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700">
+                Свяжитесь с нами
+            </a>
+        </nav>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 py-12">
+        <section class="text-center mb-16">
+            <h2 class="text-5xl font-extrabold mb-4 text-gray-900 tracking-tight">Сервис разблокировки Apple</h2>
+            <p class="text-xl text-gray-600">Профессиональные решения для вашего iPhone и iPad.</p>
+        </section>
+
+        <!-- Services -->
+        <section class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16" id="services">
+            <!-- Cards (Will be rendered via JS or hardcoded) -->
+        </section>
+
+        <!-- Calculator (Initially hidden) -->
+        <section id="calculator-section" class="max-w-xl mx-auto hidden">
+            <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-200">
+                <h3 class="text-2xl font-bold mb-6 text-gray-900">Калькулятор стоимости активации</h3>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-1">Модель iPhone</label>
+                        <select id="model" onchange="calculatePrice()" class="w-full appearance-none bg-gray-100 border-none rounded-2xl py-3 px-4 text-gray-900">
+                            <option value="6s">iPhone 6s / 6s Plus</option>
+                            <option value="7">iPhone 7 / 7 Plus</option>
+                            <option value="8">iPhone 8 / 8 Plus</option>
+                            <option value="x">iPhone X</option>
+                            <option value="xr">iPhone XR / XS / XS Max</option>
+                            <option value="11">iPhone 11 / 11 Pro / 11 Pro Max</option>
+                            <option value="12">iPhone 12 / 12 Pro / 12 Pro Max</option>
+                            <option value="13">iPhone 13 / 13 Pro / 13 Pro Max</option>
+                            <option value="14">iPhone 14 Series</option>
+                            <option value="15">iPhone 15 / 15 Plus</option>
+                            <option value="15p">iPhone 15 Pro / 15 Pro Max</option>
+                            <option value="newer">iPhone 16 / 17 и новее</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-1">Версия iOS</label>
+                        <input type="text" id="ios" oninput="calculatePrice()" value="18" class="w-full bg-gray-100 border-none rounded-2xl py-3 px-4 text-gray-900">
+                    </div>
+                </div>
+                <div class="mt-8 pt-6 border-t border-gray-100">
+                    <div class="text-sm text-gray-600">Стоимость</div>
+                    <div id="price-display" class="text-4xl font-extrabold text-gray-900 mt-1">80 BYN</div>
+                    <div id="error-message" class="text-red-600 font-medium mt-2 hidden"></div>
+                    <a id="order-link" href="https://t.me/wr8rwunlock" target="_blank" class="block mt-6 w-full bg-gray-900 text-white text-center font-bold py-3 rounded-2xl hover:bg-gray-800 transition">Заказать активацию</a>
+                </div>
+            </div>
+        </section>
+
+        <script>
+            function calculatePrice() {
+                const model = document.getElementById('model').value;
+                const ios = parseFloat(document.getElementById('ios').value);
+                const display = document.getElementById('price-display');
+                const error = document.getElementById('error-message');
+                const orderBtn = document.getElementById('order-link');
+
+                error.classList.add('hidden');
+                orderBtn.classList.remove('hidden');
+
+                if (ios > 26.1 || model === 'newer') {
+                    display.innerText = '-';
+                    error.innerText = '⚠️ Разблокировка для данной модели или версии iOS невозможна';
+                    error.classList.remove('hidden');
+                    orderBtn.classList.add('hidden');
+                    return;
+                }
+
+                let price = 80;
+                if (['xr'].includes(model)) price = 100;
+                else if (['11', '12', '13'].includes(model)) price = 150;
+                else if (model === '14') price = 200;
+                else if (model === '15') price = 220;
+                else if (model === '15p') price = 250;
+
+                display.innerText = price + ' BYN';
+            }
+        </script>
+    </main>
+
+    <script>
+        const services = [
+            { title: 'Активация без сети', price: '50 BYN', description: 'Активация устройства. Звонки, мобильная связь и SMS работать не будут.', action: "window.open('https://t.me/wr8rwunlock', '_blank')", buttonText: 'Заказать' },
+            { title: 'Активация 6-15 Pro Max', price: 'Узнать цену', description: 'Профессиональная активация вашего устройства.', action: "toggleCalculator()", buttonText: 'Рассчитать стоимость' },
+            { title: 'Полная отвязка iCloud', price: 'от 350 BYN', description: 'Полное снятие блокировки iCloud с любого устройства.', action: "window.open('https://t.me/wr8rwunlock', '_blank')", buttonText: 'Заказать' },
+            { title: 'Разблокировка iCloud', price: '250 BYN', description: 'Разблокировка при наличии доступа к настройкам устройства.', action: "window.location.href='/icloud.html'", buttonText: 'Инструкция' }
+        ];
+
+        function toggleCalculator() {
+            document.getElementById('calculator-section').classList.remove('hidden');
+            document.getElementById('calculator-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        const grid = document.getElementById('services');
+        services.forEach(s => {
+            grid.innerHTML += `
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 flex flex-col">
+                    <h3 class="text-xl font-bold mb-4">${s.title}</h3>
+                    <p class="text-gray-600 mb-6 flex-grow">${s.description}</p>
+                    <div class="text-2xl font-extrabold text-gray-900 mb-6">${s.price}</div>
+                    <button onclick="${s.action}" class="w-full bg-gray-900 text-white font-bold py-3 px-4 rounded-2xl hover:bg-gray-800 transition">
+                        ${s.buttonText}
+                    </button>
+                </div>
+            `;
+        });
+    </script>
+</body>
 </html>
